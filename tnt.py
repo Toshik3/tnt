@@ -46,9 +46,30 @@ def process_folder(source_folder, destination_folder):
                     with zipfile.ZipFile(file_path, 'r') as zip_ref:
                         zip_ref.extractall(os.path.join(
                             destination_folder, subdir, normalize(file)))
+                    os.remove(file_path)  # Видалення архіву
                     continue
                 else:
                     subdir = 'others'
+
+                shutil.move(file_path, os.path.join(
+                    destination_folder, subdir))
+
+        if not files and not dirs:
+            shutil.rmtree(root)  # Видалення порожньої папки
+
+
+if len(sys.argv) != 2:
+    print('Usage: python sort.py <directory_path>')
+    sys.exit(1)
+
+folder_path = sys.argv[1]
+
+if not os.path.isdir(folder_path):
+    print('Invalid directory path.')
+    sys.exit(1)
+
+process_folder(folder_path, folder_path)
+
 
                 shutil.move(file_path, os.path.join(
                     destination_folder, subdir))
